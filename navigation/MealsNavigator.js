@@ -14,6 +14,14 @@ import MealDetailScreen from "../screens/MealDetailScreen";
 import Colors from "../constants/Colors";
 import FavoritesScreen from "../screens/FavoritesScreen";
 
+const defaultStackNavOptions = {
+  headerStyle: {
+    backgroundColor: Platform.OS === "android" ? Colors.primaryColor : "",
+  },
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primaryColor,
+  headerTitle: "A Screen",
+};
+
 const MealsNavigator = createStackNavigator(
   {
     Categories: {
@@ -27,14 +35,19 @@ const MealsNavigator = createStackNavigator(
   {
     // initialRouteName: 'Categories',
 
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: Platform.OS === "android" ? Colors.primaryColor : "",
-      },
-      headerTintColor:
-        Platform.OS === "android" ? "white" : Colors.primaryColor,
-      headerTitle: "A Screen",
-    },
+    defaultNavigationOptions: defaultStackNavOptions,
+  }
+);
+
+const FavNavigator = createStackNavigator(
+  {
+    Favorites: FavoritesScreen,
+    MealDetail: MealDetailScreen,
+  },
+  {
+    // initialRouteName: 'Categories',
+
+    defaultNavigationOptions: defaultStackNavOptions,
   }
 );
 
@@ -51,7 +64,7 @@ const tabScreenConfig = {
     },
   },
   Favorites: {
-    screen: FavoritesScreen,
+    screen: FavNavigator,
     navigationOptions: {
       tabBarIcon: (tabInfo) => {
         return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />;
@@ -78,3 +91,9 @@ const MealsFavTabNavigator =
 export default createAppContainer(MealsFavTabNavigator);
 
 //tabBarColor only works with SHIFTING.
+//tabBarIcon is a function that receives some tabInfo and it returns the icon that
+//we have to render for the given tab i.e Meals and Favorites tab.
+//In navigation OPtions we can also use tabBarLabel property like
+//tabBarLabel:'Favorites!!' , so we can overwrite the default label which is assumed too if we want to.
+//For materialTab navigator we don't use tabBarOptions to configure our tabs like activeTintColor
+//we directly configure activeTintColor in there,and there are other shifting too like shifting to true.
